@@ -1,9 +1,21 @@
 const productRoute = require("express").Router();
 let products = [
-  { id: 1, name: "Samsung Tv", price: "26000 $" },
-  { id: 2, name: "Nokia Mobile", price: "6000 $" },
-  { id: 3, name: "R1 5 bike", price: "360000 $" },
-];
+  {
+      id: '1',
+      name: 'Photoshop',
+      price: 300
+  },
+  {
+      id: '2',
+      name: 'Webstorm',
+      price: 200
+  },
+  {
+      id: '3',
+      name: 'Figma',
+      price: 20
+  }
+]
 productRoute.get("/api/products", (req, res) => {
   res.json(products);
 });
@@ -11,7 +23,7 @@ productRoute.get("/api/products", (req, res) => {
 productRoute.post("/api/products", (req, res) => {
 const {name,price}=req.body
  if(!name||!price){
-     return res.status(422).json({error:'All field are required'})
+     throw new Error("All fields are required!")
  }
  const product={
      name,
@@ -21,5 +33,10 @@ const {name,price}=req.body
  products.push(product)
   res.json(product)
 
+});
+
+productRoute.delete('/api/products/:productId', (req, res) => {
+  products = products.filter((product) => req.params.productId !== product.id);
+  res.json({ status: 'OK' });
 });
 module.exports = productRoute;
